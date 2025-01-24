@@ -12,7 +12,7 @@ import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SafeAreaView } from 'react-native-safe-area-context'; // Importación del SafeAreaView
 
- const BusDetailsScreen = () => {
+export default function BusDetailsScreen()  {
   const details = [
     { icon: 'confirmation-number', label: 'Engine ID', value: '6545424558' },
     { icon: 'local-gas-station', label: 'Engine type', value: 'Petrol' },
@@ -202,5 +202,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-export default BusDetailsScreen;
