@@ -6,7 +6,6 @@ import MapView, { Marker } from 'react-native-maps';
 
 const Stack = createStackNavigator();
 const { width, height } = Dimensions.get('window');
-const { h } = Dimensions.get('window');
 
 function MainScreen() {
   const [GPSModalVisible, setGPSModalVisible] = useState(false);
@@ -51,15 +50,37 @@ const renderItem = ({ item }) => (
       </View>
       <Text style={styles.speedTextGPS}>{item.speed}</Text>
       <View style={styles.iconsContainerGPS}>
-        <TouchableOpacity><Text style={styles.iconGPS}>⚡</Text></TouchableOpacity>
-        <TouchableOpacity><Text style={styles.iconGPS}>📶</Text></TouchableOpacity>
+        <Text style={styles.iconGPS}>⚡</Text>
+        <Text style={styles.iconGPS}>📶</Text>
       </View>
       <TouchableOpacity>
-        <Text style={styles.dotsGPS}>⋮</Text>
+        <Text style={styles.dotsGPS}> ⋮ </Text>
       </TouchableOpacity>
     </View>
   );
 
+  const slideAnim = useRef(new Animated.Value(height)).current; // Inicializa el valor fuera de la pantalla
+
+useEffect(() => {
+  if (GPSModalVisible) {
+    // Reinicia el valor antes de animar hacia arriba
+    slideAnim.setValue(height);
+
+    // Mostrar el modal (deslizar hacia arriba)
+    Animated.timing(slideAnim, {
+      toValue: height * 0.3, // Posición final del modal
+      duration: 300, // Duración de la animación
+      useNativeDriver: true,
+    }).start();
+  } else {
+    // Ocultar el modal (deslizar hacia abajo)
+    Animated.timing(slideAnim, {
+      toValue: height, // Posición fuera de la pantalla
+      duration: 10,
+      useNativeDriver: true,
+    }).start();
+  }
+}, [GPSModalVisible]);
   
   
 
@@ -144,36 +165,43 @@ const renderItem = ({ item }) => (
       </Modal>
       
       <Modal
-  animationType="slide"
+  animationType="none" // Desactivamos la animación predeterminada
   transparent={true}
   visible={GPSModalVisible}
   onRequestClose={() => setGPSModalVisible(false)} // Cerrar el modal al presionar "atrás"
 >
-  <Pressable style={styles.overlay} onPress={() => setGPSModalVisible(false)}>
-    <Pressable style={styles.containerGPS}>
-      <Text style={styles.titleGPS}>Vehiculos</Text>
-      <View style={styles.buttonsContainerGPS}>
-        <TouchableOpacity style={styles.buttonGPS}>
-          <Text style={styles.buttonTextGPS}>ALL</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonGPS}>
-          <Text style={styles.buttonTextGPS}>OFFLINE</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonGPS}>
-          <Text style={styles.buttonTextGPS}>MOVING</Text>
-        </TouchableOpacity>
-        <TextInput style={styles.searchGPS} placeholder="SEARCH" />
-      </View>
+  {/* Overlay: aparece inmediatamente */}
+  <Pressable style={styles.overlay} onPress={() => setGPSModalVisible(false)} />
 
-      <View style={styles.listContainerGPS}>
-        <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
-    </Pressable>
-  </Pressable>
+  {/* Modal deslizable */}
+  <Animated.View
+    style={[
+      styles.containerGPS,
+      { transform: [{ translateY: slideAnim }] }, // Animación de deslizamiento
+    ]}
+  >
+    <Text style={styles.titleGPS}>Vehiculos</Text>
+    <View style={styles.buttonsContainerGPS}>
+      <TouchableOpacity style={styles.buttonGPS}>
+        <Text style={styles.buttonTextGPS}>ALL</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonGPS}>
+        <Text style={styles.buttonTextGPS}>OFFLINE</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonGPS}>
+        <Text style={styles.buttonTextGPS}>MOVING</Text>
+      </TouchableOpacity>
+      <TextInput style={styles.searchGPS} placeholder="SEARCH" />
+    </View>
+
+    <View style={styles.listContainerGPS}>
+      <FlatList
+        data={DATA}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
+  </Animated.View>
 </Modal>
       <StatusBar style="auto" />
     </View>
@@ -305,24 +333,30 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
-    justifyContent: 'flex-end', // Posiciona el modal en la parte inferior
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   containerGPS: {
-    height: '70%', // Ocupa el 70% de la pantalla desde la parte inferior
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: '95%',
     backgroundColor: '#fff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 20,
+    padding: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5, // Sombra para Android
+    
   },
   titleGPS: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#000', // Cambié el color a negro para que sea visible sobre el fondo blanco
+    color: '#000',
     textAlign: 'left',
     marginBottom: 10,
   },
@@ -330,7 +364,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 30,
   },
   buttonGPS: {
     backgroundColor: '#FF7F00',
@@ -339,6 +373,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: 'black',
     borderWidth: 2,
+    marginHorizontal:2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -361,13 +396,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 5,
-    marginTop: 10,
+    padding: 10,
+    marginTop: 3,
+    borderColor: 'black',
+    borderWidth: 1,
   },
   listItemGPS: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
+    paddingHorizontal: 1,
+    paddingVertical:15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
@@ -376,8 +414,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   checkboxGPS: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     borderWidth: 2,
     borderColor: '#888',
     borderRadius: 5,
@@ -410,7 +448,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 1,
   },
   dotsGPS: {
-    fontSize: 30,
+    fontSize: 40,
     color: '#888',
   },
 
