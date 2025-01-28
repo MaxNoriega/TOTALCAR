@@ -8,11 +8,49 @@ import MapView, { Marker } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
+
+const ListItem = ({ item, toggleCheckbox, toggleCheckbox2, selectedCheckboxes, selectedCheckboxes2, closeModal }) => {
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.listItemGPS}>
+      <TouchableOpacity
+        style={[styles.checkboxGPS, selectedCheckboxes.includes(item.id) && styles.checkboxSelectedGPS]}
+        onPress={() => toggleCheckbox(item.id)}
+      />
+      <TouchableOpacity
+        style={[styles.checkboxGPS, selectedCheckboxes2.includes(item.id) && styles.checkboxSelectedGPS]}
+        onPress={() => toggleCheckbox2(item.id)}
+      />
+      <View style={styles.textContainerGPS}>
+        <Text style={styles.listTextGPS}>{item.title}</Text>
+        <Text style={styles.statusTextGPS}>{item.status}</Text>
+      </View>
+      <Text style={styles.speedTextGPS}>{item.speed}</Text>
+      <View style={styles.iconsContainerGPS}>
+        <Text style={styles.iconGPS}>⚡</Text>
+        <Text style={styles.iconGPS}>📶</Text>
+      </View>
+      <TouchableOpacity 
+          onPress={() => {
+            closeModal(); // Cierra el modal
+            navigation.navigate('DetailsObject', { itemId: item.id });
+             }}
+          >
+        <Text style={styles.dotsGPS}> ⋮ </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 export default function MainScreen() {
-  const [GPSModalVisible, setGPSModalVisible] = useState(false);
-  const [MenuModalVisible, setMenuModalVisible] = useState(false);
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  const [selectedCheckboxes2, setSelectedCheckboxes2] = useState([]);
+const [GPSModalVisible, setGPSModalVisible] = useState(false);
+const [isHidden, setIsHidden] = useState(false);
+const [MenuModalVisible, setMenuModalVisible] = useState(false);
+const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+const [selectedCheckboxes2, setSelectedCheckboxes2] = useState([]);
+ 
+  
 
   const DATA = [
     { id: '1', title: 'Bus', status: 'Moving 18 min 43 s', speed: '131 kph' },
@@ -35,30 +73,6 @@ export default function MainScreen() {
       setSelectedCheckboxes2([...selectedCheckboxes2, id]);
     }
   };
-
-const renderItem = ({ item }) => (
-    <View style={styles.listItemGPS}>
-      <TouchableOpacity
-        style={[styles.checkboxGPS, selectedCheckboxes.includes(item.id) && styles.checkboxSelectedGPS]}
-        onPress={() => toggleCheckbox(item.id)}/>
-      <TouchableOpacity
-        style={[styles.checkboxGPS, selectedCheckboxes2.includes(item.id) && styles.checkboxSelectedGPS]}
-        onPress={() => toggleCheckbox2(item.id)}/>
-
-      <View style={styles.textContainerGPS}>
-        <Text style={styles.listTextGPS}>{item.title}</Text>
-        <Text style={styles.statusTextGPS}>{item.status}</Text>
-      </View>
-      <Text style={styles.speedTextGPS}>{item.speed}</Text>
-      <View style={styles.iconsContainerGPS}>
-        <Text style={styles.iconGPS}>⚡</Text>
-        <Text style={styles.iconGPS}>📶</Text>
-      </View>
-      <TouchableOpacity>
-        <Text style={styles.dotsGPS}> ⋮ </Text>
-      </TouchableOpacity>
-    </View>
-  );
 
   const slideAnim = useRef(new Animated.Value(height)).current; // Inicializa el valor fuera de la pantalla
 
@@ -196,10 +210,20 @@ useEffect(() => {
     </View>
 
     <View style={styles.listContainerGPS}>
-      <FlatList
+    <FlatList
         data={DATA}
-        renderItem={renderItem}
+        renderItem={({ item }) => (
+          <ListItem
+            item={item}
+            toggleCheckbox={toggleCheckbox}
+            toggleCheckbox2={toggleCheckbox2}
+            selectedCheckboxes={selectedCheckboxes}
+            selectedCheckboxes2={selectedCheckboxes2}
+            closeModal={() => setGPSModalVisible(false)} // Pasar la función como prop
+          />
+        )}
         keyExtractor={(item) => item.id}
+        
       />
     </View>
   </Animated.View>

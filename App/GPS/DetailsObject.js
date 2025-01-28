@@ -1,18 +1,10 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {View,Text,StyleSheet,FlatList,ScrollView,TextInput,TouchableOpacity} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SafeAreaView } from 'react-native-safe-area-context'; // Importación del SafeAreaView
 
-export default function BusDetailsScreen()  {
+export default function DetailsObject()  {
   const details = [
     { icon: 'confirmation-number', label: 'Engine ID', value: '6545424558' },
     { icon: 'local-gas-station', label: 'Engine type', value: 'Petrol' },
@@ -22,10 +14,7 @@ export default function BusDetailsScreen()  {
     { icon: 'directions-car', label: 'Plate', value: 'PLA987' },
     { icon: 'timeline', label: 'Status', value: 'Moving 54 min 8 s' },
     {
-      icon: 'location-on',
-      label: 'Address',
-      value:
-        'Kreuz Dortmund-Nordwest, A 2, Ickern Nord, Castrop-Rauxel, Nordrhein-Westfalen, 44581, Deutschland',
+      icon: 'location-on', label: 'Address', value:'Kreuz Dortmund-Nordwest, A 2, Ickern Nord, Castrop-Rauxel, Nordrhein-Westfalen, 44581, Deutschland',
     },
     { icon: 'alt-route', label: 'Altitude', value: '61 m' },
     { icon: 'navigation', label: 'Angle', value: '112°' },
@@ -38,23 +27,15 @@ export default function BusDetailsScreen()  {
     { icon: 'gps-fixed', label: 'Position', value: '51.587075°, 7.361477°' },
     { icon: 'speed', label: 'Speed', value: '129 kph' },
     {
-      icon: 'schedule',
-      label: 'Time (position)',
-      value: '2024-02-15 10:59:12',
+      icon: 'schedule', label: 'Time (position)', value: '2024-02-15 10:59:12',
     },
     { icon: 'schedule', label: 'Time (server)', value: '2024-02-15 10:59:17' },
     { icon: 'power', label: 'Ignition', value: 'on' },
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* Encabezado */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => console.log('Back button pressed!')}>
-          <Icon name="arrow-back" size={50} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Details (Bus)</Text>
-      </View>
+  
+  
 
       <ScrollView
         style={styles.container}
@@ -110,32 +91,13 @@ export default function BusDetailsScreen()  {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#FF7F00',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#f9f9f9',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#FF7F00',
-    padding: 10,
-  },
-  headerTitle: {
-    fontSize: 30,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
+
   detailItem: {
+    backgroundColor: '#f9f9f9',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 15,
