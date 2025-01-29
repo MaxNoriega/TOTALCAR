@@ -1,121 +1,151 @@
 import React from 'react';
-import {View,Text,StyleSheet,FlatList,ScrollView,TextInput,TouchableOpacity} from 'react-native';
+import {View,Text,StyleSheet,FlatList,ScrollView,TextInput,TouchableOpacity, Platform, KeyboardAvoidingView} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { SafeAreaView } from 'react-native-safe-area-context'; // Importación del SafeAreaView
 
+
 export default function DetailsObject()  {
-  const details = [
-    { icon: 'confirmation-number', label: 'Engine ID', value: '6545424558' },
-    { icon: 'local-gas-station', label: 'Engine type', value: 'Petrol' },
-    { icon: 'timer', label: 'Engine hours', value: '34852 h 35 min 12 s' },
-    { icon: 'directions-bus', label: 'Model', value: 'Plaxton Elite' },
-    { icon: 'speed', label: 'Odometer', value: '4202645 km' },
-    { icon: 'directions-car', label: 'Plate', value: 'PLA987' },
-    { icon: 'timeline', label: 'Status', value: 'Moving 54 min 8 s' },
-    {
-      icon: 'location-on', label: 'Address', value:'Kreuz Dortmund-Nordwest, A 2, Ickern Nord, Castrop-Rauxel, Nordrhein-Westfalen, 44581, Deutschland',
-    },
-    { icon: 'alt-route', label: 'Altitude', value: '61 m' },
-    { icon: 'navigation', label: 'Angle', value: '112°' },
-    {
-      icon: 'place',
-      label: 'Nearest marker',
-      value: 'New marker 1 (243.77 km)',
-    },
-    { icon: 'place', label: 'Nearest zone', value: 'Europe (463.16 km)' },
-    { icon: 'gps-fixed', label: 'Position', value: '51.587075°, 7.361477°' },
-    { icon: 'speed', label: 'Speed', value: '129 kph' },
-    {
-      icon: 'schedule', label: 'Time (position)', value: '2024-02-15 10:59:12',
-    },
-    { icon: 'schedule', label: 'Time (server)', value: '2024-02-15 10:59:17' },
-    { icon: 'power', label: 'Ignition', value: 'on' },
-  ];
+
+      const fields = [
+        { label: 'Engine ID', icon: 'confirmation-number' },
+        { label: 'Engine type', icon: 'local-gas-station' },
+        { label: 'Engine hours', icon: 'timer' },
+        { label: 'Model', icon: 'directions-bus' },
+        { label: 'Odometer', icon: 'speed' },
+        { label: 'Plate', icon: 'directions-car' },
+        { label: 'Status', icon: 'timeline' },
+        { label: 'Address', icon: 'location-on' },
+        { label: 'Altitude', icon: 'alt-route' },
+        { label: 'Angle', icon: 'navigation' },
+        { label: 'Nearest marker', icon: 'place' },
+        { label: 'Nearest zone', icon: 'place' },
+        { label: 'Position', icon: 'gps-fixed' },
+        { label: 'Speed', icon: 'speed' },
+        { label: 'Time (position)', icon: 'schedule' },
+        { label: 'Time (server)', icon: 'schedule' },
+        { label: 'Ignition', icon: 'power' },
+      ];
+
+      const details = [
+        { key: 'Engine ID', value: '6545424558' },
+        { key: 'Engine type', value: 'Petrol' },
+        { key: 'Engine hours', value: '34852 h 35 min 12 s' },
+        { key: 'Model', value: 'Plaxton Elite' },
+        { key: 'Odometer', value: '4202645 km' },
+        { key: 'Plate', value: 'PLA987' },
+        { key: 'Status', value: 'Moving 54 min 8 s' },
+        { key: 'Address', value: 'Kreuz Dortmund-Nordwest, A 2, Ickern Nord, Castrop-Rauxel, Nordrhein-Westfalen, 44581, Deutschland' },
+        { key: 'Altitude', value: '61 m' },
+        { key: 'Angle', value: '112°' },
+        { key: 'Nearest marker', value: 'New marker 1 (243.77 km)' },
+        { key: 'Nearest zone', value: 'Europe (463.16 km)' },
+        { key: 'Position', value: '51.587075°, 7.361477°' },
+        { key: 'Speed', value: '129 kph' },
+        { key: 'Time (position)', value: '2024-02-15 10:59:12' },
+        { key: 'Time (server)', value: '2024-02-15 10:59:17' },
+        { key: 'Ignition', value: 'on' },
+      ];
 
   return (
-  
-  
 
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={{ flexGrow: 1 }} // Para hacer que el ScrollView ocupe todo el espacio.
-        bounces={false} // Deshabilitar rebote en iOS
-        overScrollMode="never" // Deshabilitar rebote en Android
+                                          //Ajuste a Apartado de comando al final de la Screen
+        <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.select({ ios: 100, android: 20 })} // Ajustar 
       >
-        {/* Lista de detalles */}
-        <FlatList
-          data={details}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.detailItem}>
-              <Icon
-                name={item.icon}
-                size={24}
-                color="#555"
-                style={styles.icon}
-              />
-              <Text style={styles.label}>{item.label}</Text>
-              <Text style={styles.value}>{item.value}</Text>
-            </View>
-          )}
-          scrollEnabled={false} // Deshabilita el scroll interno para evitar conflictos con ScrollView
-        />
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ flexGrow: 1 }}
+      bounces={false}
+      overScrollMode="never"
+      keyboardShouldPersistTaps="handled" // Permite interactuar con elementos sin cerrar el teclado
+    >
+      {/* Lista de detalles */}
+      <FlatList
+        data={fields}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <View style={styles.detailItem}>
+            <Text style={styles.label}>{item.label}</Text>
+            <Text style={styles.value}>{details[index]?.value || 'N/A'}</Text>
+          </View>
+        )}
+        scrollEnabled={false}
+      />
 
-        {/* Mapa */}
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: 29.086007899070683, // Coordenadas iniciales
+      {/* Mapa */}
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: 29.086007899070683,
+          longitude: -110.99118980474093,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        <Marker
+          coordinate={{
+            latitude: 29.086007899070683,
             longitude: -110.99118980474093,
-            latitudeDelta: 0.0922, // Nivel de zoom
-            longitudeDelta: 0.0421,
-          }}>
-          <Marker
-            coordinate={{
-              latitude: 29.086007899070683,
-              longitude: -110.99118980474093,
-            }}
-            title="Current Position"
-          />
-        </MapView>
+          }}
+          title="Current Position"
+        />
+      </MapView>
 
-        {/* Control del objeto */}
-        <View style={styles.objectControl}>
-          <Text style={styles.controlTitle}>Object control</Text>
-          <TextInput style={styles.input} placeholder="Template" />
-          <TextInput style={styles.input} placeholder="Type" />
-          <TextInput style={styles.input} placeholder="Command" />
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Send</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+      {/* Control del objeto */}
+      <View style={styles.objectControl}>
+        <Text style={styles.controlTitle}>Object control</Text>
+        <TextInput style={styles.input} placeholder="Template" />
+        <TextInput style={styles.input} placeholder="Type" />
+        <TextInput style={styles.input} placeholder="Command" />
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Send</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  </KeyboardAvoidingView>
+
   );
 };
 
 const styles = StyleSheet.create({
 
+
+
   detailItem: {
     backgroundColor: '#f9f9f9',
-    flexDirection: 'row',
+    flexDirection: 'row', 
     alignItems: 'center',
-    padding: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
+    flexWrap: 'wrap', // Permite que los elementos se ajusten si no caben en la fila
   },
+  
   icon: {
-    marginRight: 15,
+    fontsize: 24,
+    marginRight: 5,
+    width: 14, // Asegura que todos los íconos tengan el mismo tamaño
+    textAlign: 'center',
+    color: '#555',
   },
+  
   label: {
-    flex: 1,
+    flexShrink: 1, // Permite que el texto se reduzca si es necesario
     fontSize: 16,
     color: '#555',
   },
+  
   value: {
+    flex: 1, // Ocupa el espacio restante
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
+    textAlign: 'right', // Asegura que los valores largos se alineen correctamente
+    flexWrap: 'wrap', // Permite que el texto largo se ajuste en varias líneas
   },
   map: {
     height: 200,
