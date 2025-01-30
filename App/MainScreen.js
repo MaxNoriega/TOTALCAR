@@ -178,11 +178,11 @@ useEffect(() => {
       </Modal>
       
       <Modal
-  animationType="none" // Desactivamos la animación predeterminada
-  transparent={true}
-  visible={GPSModalVisible}
-  onRequestClose={() => setGPSModalVisible(false)} // Cerrar el modal al presionar "atrás"
->
+        animationType="none" // Desactivamos la animación predeterminada
+        transparent={true}
+        visible={GPSModalVisible}
+        onRequestClose={() => setGPSModalVisible(false)} // Cerrar el modal al presionar "atrás"
+      >
   {/* Overlay: aparece inmediatamente */}
   <Pressable style={styles.overlay} onPress={() => setGPSModalVisible(false)} />
 
