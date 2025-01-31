@@ -47,6 +47,7 @@ const [isHidden, setIsHidden] = useState(false);
 const [MenuModalVisible, setMenuModalVisible] = useState(false);
 const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 const [selectedCheckboxes2, setSelectedCheckboxes2] = useState([]);
+const navigation = useNavigation();
  
   
 
@@ -166,7 +167,12 @@ useEffect(() => {
               <TouchableOpacity style={styles.optionButton}>
                 <Text style={styles.optionText}>REPORTES</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.optionButton}>
+              <TouchableOpacity style={styles.optionButton}
+              onPress={()=>{
+                setMenuModalVisible(false);
+                navigation.navigate('Historial')
+              }}
+              >
                 <Text style={styles.optionText}>HISTORIAL</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.optionButton}>

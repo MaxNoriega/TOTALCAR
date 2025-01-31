@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { SafeAreaView, View, Text, Pressable, FlatList, Modal, StyleSheet, TouchableWithoutFeedback,} from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
+
+  
 // Componente DropdownSelector
 const DropdownSelector = ({ label, value, options, onSelect }) => {
   const [modalVisible, setModalVisible] = useState(false);
+ 
 
   return (
     <>
@@ -45,38 +49,25 @@ const DropdownSelector = ({ label, value, options, onSelect }) => {
 };
 
 // Pantalla principal HistoryScreen
-const HistoryScreen = ({ navigation }) => {
+export default function HistoryScreen({ navigation })  {
   const [selectedValues, setSelectedValues] = useState({
-    object: 'Bus',
-    filter: 'Today',
-    stops: '> 1 min',
+    objeto: 'Bus',
+    filtro: 'Hoy',
+    paradas: '> 1 min',
   });
 
   const options = {
-    object: ['Bus', 'Train', 'Taxi'],
-    filter: ['Today', 'Yesterday', 'Last Week'],
-    stops: ['> 1 min', '> 5 min', '> 10 min'],
+    objeto: ['Bus', 'Train', 'Taxi'],
+    filtro: ['Hoy', 'Ayer', 'Semana Pasada'],
+    paradas: ['> 1 min', '> 5 min', '> 10 min'],
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-          hitSlop={10}
-        >
-          <Ionicons name="arrow-back" size={28} color="white" />
-        </Pressable>
-        <Text style={styles.headerTitle}>History</Text>
-      </View>
-
-      {/* Selectores */}
       <View style={styles.formContainer}>
-        {Object.keys(options).map((field, index) => (
+        {Object.keys(options).map((field) => (
           <DropdownSelector
-            key={index}
+            key={field}
             label={field.charAt(0).toUpperCase() + field.slice(1)}
             value={selectedValues[field]}
             options={options[field]}
@@ -90,9 +81,9 @@ const HistoryScreen = ({ navigation }) => {
           2024-02-15 00:00:00 - 2024-02-16 00:00:00
         </Text>
 
-        {/* Botón */}
-        <Button mode="contained" style={styles.button} icon="history">
-          Show
+        <Button mode="contained" style={styles.button} icon="history"
+        onPress={() => navigation.navigate('MAP')}>
+          Mostrar
         </Button>
       </View>
     </SafeAreaView>
@@ -151,5 +142,3 @@ const styles = StyleSheet.create({
   option: { padding: 15, borderBottomWidth: 1, borderBottomColor: '#EEE' },
   optionText: { fontSize: 18, textAlign: 'center', color: '#333' },
 });
-
-export default HistoryScreen;
