@@ -82,7 +82,7 @@ export default function HistoryScreen({ navigation })  {
         </Text>
 
         <Button mode="contained" style={styles.button} icon="history"
-        onPress={() => navigation.navigate('MAP')}>
+        onPress={() => navigation.navigate('Tabs',{screen: "MAP"})}>
           Mostrar
         </Button>
       </View>

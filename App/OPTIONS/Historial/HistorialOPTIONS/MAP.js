@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   map: { flex: 1 },
   controls: {
     position: "absolute",
-    bottom: 50,
+    bottom: 10,
     left: 10,
     right: 10,
     backgroundColor: "white",
